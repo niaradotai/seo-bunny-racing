@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import redis from "../../lib/redis";
 import { RaceResult } from "../results/route";
 
@@ -10,7 +10,7 @@ export interface LeaderboardEntry {
   lastRaced: number;
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // Get all race IDs
     const raceIds = await redis.lrange('bunny_race_results', 0, -1);
@@ -74,10 +74,10 @@ export async function GET(req: NextRequest) {
     const leaderboard = Array.from(urlMap.values())
       .sort((a, b) => b.score - a.score);
     
-    return Response.json(leaderboard);
+    return NextResponse.json(leaderboard);
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
-    return Response.json(
+    return NextResponse.json(
       { error: 'Failed to fetch leaderboard data' },
       { status: 500 }
     );

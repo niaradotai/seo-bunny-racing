@@ -1,15 +1,17 @@
 import React from 'react';
+import Link from 'next/link';
 import { Metadata, ResolvingMetadata } from 'next';
 
 // Define the types for props
-interface PageProps {
+type PageProps = {
   params: { id: string };
-}
+  searchParams: Record<string, string | string[] | undefined>;
+};
 
 // Generate dynamic metadata for the page
 export async function generateMetadata(
   { params }: PageProps,
-  parent: ResolvingMetadata
+  _parent: ResolvingMetadata
 ): Promise<Metadata> {
   // Fetch race data
   const raceData = await fetchRaceData(params.id);
@@ -79,12 +81,12 @@ export default async function SharePage({ params }: PageProps) {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-4">
         <h1 className="text-3xl font-bold mb-4">Race Results Not Found</h1>
         <p className="mb-8">The shared race results could not be found or may have expired.</p>
-        <a 
+        <Link 
           href="/"
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
         >
           Start Your Own Race
-        </a>
+        </Link>
       </div>
     );
   }
@@ -136,12 +138,12 @@ export default async function SharePage({ params }: PageProps) {
           </div>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a 
+            <Link 
               href="/"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 text-center"
             >
               Race Your Own Websites
-            </a>
+            </Link>
             
             <button
               onClick={() => {

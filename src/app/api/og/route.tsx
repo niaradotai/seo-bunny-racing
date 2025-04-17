@@ -11,7 +11,8 @@ export async function GET(req: NextRequest) {
     const winner = searchParams.get('winner') || 'Unknown Website';
     const score = searchParams.get('score') || '0';
     const urlsCount = searchParams.get('count') || '1';
-    const raceId = searchParams.get('id') || '';
+    // Get ID from params (not used directly)
+    searchParams.get('id');
     
     return new ImageResponse(
       (
@@ -152,8 +153,8 @@ export async function GET(req: NextRequest) {
         height: 630,
       },
     );
-  } catch (e: any) {
-    console.error(`Error generating image: ${e.message}`);
+  } catch (e: unknown) {
+    console.error(`Error generating image: ${e instanceof Error ? e.message : 'Unknown error'}`);
     return new Response(`Failed to generate image`, {
       status: 500,
     });

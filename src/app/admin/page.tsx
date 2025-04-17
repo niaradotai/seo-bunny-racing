@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 interface StatsData {
   totalRaces: number;
   topUrls: [string, number][];
-  recentRaces: any[];
+  recentRaces: Record<string, unknown>[];
 }
 
 export default function AdminDashboard() {

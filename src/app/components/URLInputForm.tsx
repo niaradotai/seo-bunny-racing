@@ -81,7 +81,7 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
                                         try {
                                             const url = new URL(value);
                                             return url.protocol === "http:" || url.protocol === "https:" || "Please enter a valid URL";
-                                        } catch (e) {
+                                        } catch {
                                             return "Please enter a valid URL";
                                         }
                                     }
