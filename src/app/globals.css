@@ -1,26 +1,194 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+    --animate-move-right-slow: move-right 3s linear infinite;
+    --animate-move-right-medium: move-right 5s linear infinite;
+    --animate-move-right-fast: move-right 8s linear infinite;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    @keyframes move-right {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(100%);
+        }
+    }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    background-color: #000000;
+    background-image: url("/assets/bg-scene.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100vh;
+}
+
+/* Special mode for screenshots to avoid OKLCH color issues */
+.screenshot-mode button {
+    background-color: #3b82f6 !important; /* fallback blue for all buttons */
+    color: white !important;
+}
+
+.screenshot-mode .bg-blue-600 {
+    background-color: #2563eb !important;
+}
+
+.screenshot-mode .bg-green-600 {
+    background-color: #16a34a !important;
+}
+
+.screenshot-mode .text-blue-300 {
+    color: #93c5fd !important;
+}
+
+.screenshot-mode .text-yellow-300 {
+    color: #fcd34d !important;
+}
+
+.screenshot-mode .bg-gray-800 {
+    background-color: #1f2937 !important;
+}
+
+.screenshot-mode .bg-gray-900 {
+    background-color: #111827 !important;
+}
+
+.screenshot-mode .border-yellow-500 {
+    border-color: #eab308 !important;
+}
+
+.screenshot-mode .text-green-400 {
+    color: #4ade80 !important;
+}
+
+#app {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.spritePosition {
+    margin: 10px 0 0 10px;
+    font-size: 0.8em;
+}
+
+.button {
+    width: 140px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #000000;
+    color: rgba(255, 255, 255, 0.87);
+    border: 1px solid rgba(255, 255, 255, 0.87);
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+        border: 1px solid #0ec3c9;
+        color: #0ec3c9;
+    }
+
+    &:active {
+        background-color: #0ec3c9;
+    }
+
+    /* Disabled styles */
+    &:disabled {
+        cursor: not-allowed;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+.bg-rabbit_1 {
+    width: 74px;
+    height: 40px;
+    background: url("/assets/rabbit-sprite.png") -104px -10px;
+}
+
+.bg-rabbit_2 {
+    width: 74px;
+    height: 40px;
+    background: url("/assets/rabbit-sprite.png") -10px -10px;
+}
+
+.bg-rabbit_3 {
+    width: 74px;
+    height: 40px;
+    background: url("/assets/rabbit-sprite.png") -386px -10px;
+}
+
+.bg-rabbit_4 {
+    width: 74px;
+    height: 40px;
+    background: url("/assets/rabbit-sprite.png") -198px -10px;
+}
+
+.bg-rabbit_5 {
+    width: 74px;
+    height: 40px;
+    background: url("/assets/rabbit-sprite.png") -292px -10px;
+}
+
+/* Running Rabbit Animation */
+.rabbit-running {
+    width: 80px;
+    height: 60px;
+    background-image: url("/assets/running-rabbit.gif");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* Finish line effect */
+@keyframes flash {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.finish-flash {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background-color: white;
+    animation: flash 0.2s ease-in-out 5;
+    z-index: 20;
+    display: none;
+}
+
+.finish-active .finish-flash {
+    display: block;
+}
+
+/* Different colored rabbits */
+.rabbit-yellow {
+    filter: sepia(70%) hue-rotate(5deg) saturate(3) brightness(1.2);
+}
+
+.rabbit-blue {
+    filter: sepia(50%) hue-rotate(180deg) saturate(4) brightness(1);
+}
+
+.rabbit-green {
+    filter: sepia(60%) hue-rotate(90deg) saturate(2.5) brightness(1.1);
+}
+
+.rabbit-red {
+    filter: sepia(50%) hue-rotate(320deg) saturate(5) brightness(1);
+}
+
+.rabbit-purple {
+    filter: sepia(60%) hue-rotate(250deg) saturate(3.5) brightness(1);
 }
