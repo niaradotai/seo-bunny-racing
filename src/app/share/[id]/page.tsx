@@ -98,7 +98,7 @@ export default async function SharePage({ params }: PageProps) {
             >
                 <div className="flex justify-center mb-6">
                     <Image
-                        src="assets/logo.png"
+                        src="/assets/logo.png"
                         width={200}
                         height={200}
                         alt="Bunny Racer"
