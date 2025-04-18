@@ -7,6 +7,7 @@ import { PageSpeedResult } from "./api/pagespeed/route";
 import { RaceResultResponse } from "./api/results/route";
 import Image from "next/image";
 import Footer from "./components/footer";
+import Link from "next/link";
 
 type GamePhase = "start" | "input" | "countdown" | "race" | "results";
 
@@ -394,12 +395,14 @@ export default function HomePage() {
                                 </div>
 
                                 <div className="mt-2 text-center">
-                                    <a
+                                    <Link
                                         href="/leaderboard"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                         className="inline-block bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded-lg transition duration-200"
                                     >
                                         View Leaderboard 🏆
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -541,14 +544,14 @@ export default function HomePage() {
                         </div>
 
                         <div className="mt-4 text-center">
-                            <a
+                            <Link
                                 href="/leaderboard"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-block bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded-lg transition duration-200"
                             >
                                 View Leaderboard 🏆
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
