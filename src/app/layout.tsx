@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
     title: "SEO Bunny Racing",
-    description: "Race against your competitors!",
+    description: "Race against your competitor's website!",
 };
 
 export default function RootLayout({
@@ -25,9 +25,12 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${geistSans.variable} ${geistMono.variable} antialiased pt-8 px-4`}
             >
-                {children}
+                <main className="flex flex-col items-center justify-center relative">
+                    {children}
+                </main>
+                <div className="flex pb-30"></div>
             </body>
         </html>
     );

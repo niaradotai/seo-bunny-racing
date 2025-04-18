@@ -40,10 +40,7 @@ export default function LeaderboardPage() {
     };
 
     return (
-        <div
-            className="min-h-screen w-full flex flex-col items-center justify-start pt-16 pb-36 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url(/assets/bg-scene.png)" }}
-        >
+        <div className="max-w-3xl w-full mx-auto">
             <div className="flex justify-center mb-6">
                 <Link href={process.env.NEXT_PUBLIC_BASE_URL || "/"}>
                     <Image
@@ -62,9 +59,9 @@ export default function LeaderboardPage() {
                     </h1>
                     <Link
                         href="/"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
+                        className="bg-violet-600 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200"
                     >
-                        Back to Race
+                        New Race
                     </Link>
                 </div>
 

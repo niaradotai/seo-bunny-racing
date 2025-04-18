@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import redis from "../../../lib/redis";
 import { RaceResult } from "../../results/route";
 
-type Url = {
+export type Url = {
     url: string;
     score: number;
     isWinner: boolean;

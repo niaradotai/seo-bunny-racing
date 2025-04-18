@@ -14,7 +14,7 @@ export default function Footer() {
                 </a>
             </div>
             <div>
-                Game created by the team of{" "}
+                Created by{" "}
                 <Link
                     href="https://niara.ai"
                     target="_blank"

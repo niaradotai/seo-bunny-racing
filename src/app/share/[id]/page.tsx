@@ -92,10 +92,7 @@ export default async function SharePage({ params }: PageProps) {
 
     if (!raceData) {
         return (
-            <div
-                className="min-h-screen w-full flex flex-col items-center justify-start pt-16 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: "url(/assets/bg-scene.png)" }}
-            >
+            <div className="max-w-xl w-full mx-auto">
                 <div className="flex justify-center mb-6">
                     <Image
                         src="/assets/logo.png"
@@ -131,10 +128,7 @@ export default async function SharePage({ params }: PageProps) {
     const raceDate = new Date(raceData.timestamp).toLocaleString();
 
     return (
-        <div
-            className="min-h-screen w-full flex flex-col items-center justify-start pt-16 pb-36 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url(/assets/bg-scene.png)" }}
-        >
+        <>
             <div className="max-w-3xl w-full mx-auto">
                 <div className="flex justify-center mb-6">
                     <Link href="/">
@@ -224,29 +218,27 @@ export default async function SharePage({ params }: PageProps) {
 
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <Link
+                            href="/leaderboard"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-lg transition duration-200 text-center"
+                        >
+                            View Leaderboard 🏆
+                        </Link>
+
+                        <Link
                             href="/"
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 text-center"
                         >
-                            Race Your Own Websites
+                            Race Again
                         </Link>
 
-                        <ShareButton
-                            title={`${
-                                winnerUrl
-                                    .replace(/(^\w+:|^)\/\//, "")
-                                    .split("/")[0]
-                            } wins SEO Bunny Racing!`}
-                            text={`Check out these SEO PageSpeed race results where ${
-                                winnerUrl
-                                    .replace(/(^\w+:|^)\/\//, "")
-                                    .split("/")[0]
-                            } won with a score of ${winnerScore}!`}
-                        />
+                        <ShareButton winner={winner} shareId={id} />
                     </div>
                 </div>
             </div>
 
             <Footer />
-        </div>
+        </>
     );
 }
