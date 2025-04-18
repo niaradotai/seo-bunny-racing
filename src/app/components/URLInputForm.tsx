@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import LoadingButton from "./loading-button";
+import FlipCounter from "./flip-counter";
 
 interface URLInputFormProps {
     onUrlsSubmit: (urls: string[]) => void;
@@ -18,7 +19,6 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
     onUrlsSubmit,
     loading,
 }) => {
-
     // Initialize react-hook-form
     const {
         register,
@@ -57,7 +57,7 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
         }
 
         // Form is valid, submit
-        
+
         onUrlsSubmit(filteredUrls);
     };
 
@@ -149,6 +149,10 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
 
                     <div>
                         <LoadingButton loading={loading} />
+                    </div>
+
+                    <div>
+                        <FlipCounter refreshInterval={30000} />
                     </div>
                 </form>
             </div>

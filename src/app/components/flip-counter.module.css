@@ -1,0 +1,87 @@
+.flipCounter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.flipCard {
+  width: 40px;
+  height: 60px;
+  margin: 0 4px;
+  border-radius: 5px;
+  position: relative;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 36px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  text-align: center;
+  line-height: 60px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.flipCard .top, 
+.flipCard .bottom {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  left: 0;
+  background-color: #333;
+  overflow: hidden;
+}
+
+.flipCard .top {
+  top: 0;
+  border-radius: 5px 5px 0 0;
+  line-height: 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background-image: linear-gradient(to bottom, #444, #222);
+}
+
+.flipCard .bottom {
+  bottom: 0;
+  border-radius: 0 0 5px 5px;
+  line-height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  background-image: linear-gradient(to bottom, #222, #333);
+}
+
+.flipCard.flipping .top {
+  animation: flip-top 1s ease-in-out;
+}
+
+.flipCard.flipping .bottom {
+  animation: flip-bottom 1s ease-in-out;
+}
+
+@keyframes flip-top {
+  0% {
+    transform: rotateX(0deg);
+    z-index: 10;
+  }
+  50%, 100% {
+    transform: rotateX(-90deg);
+    z-index: 5;
+  }
+}
+
+@keyframes flip-bottom {
+  0%, 50% {
+    transform: rotateX(90deg);
+    z-index: 5;
+  }
+  100% {
+    transform: rotateX(0deg);
+    z-index: 10;
+  }
+}
+
+.loadingPlaceholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
