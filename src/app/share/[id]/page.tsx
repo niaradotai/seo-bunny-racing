@@ -38,6 +38,7 @@ export async function generateMetadata(
     )}&score=${winnerScore}&count=${raceData?.urls?.length || 1}&id=${id}`;
 
     return {
+        metadataBase: new URL(baseUrl),
         title: `${winnerName} wins SEO Bunny Racing with ${winnerScore} points!`,
         description: `Check out the SEO PageSpeed race results where ${winnerName} won with a score of ${winnerScore}. Race your own websites now!`,
         openGraph: {
