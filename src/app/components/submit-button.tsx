@@ -12,7 +12,7 @@ const buttonStates = [
     "Start Race",
     "Warming up bunnies...",
     "Getting PageSpeed scores...",
-    "Almost there...",
+    "Race starting soon...",
 ];
 
 const SubmitButton = ({
@@ -61,9 +61,10 @@ const SubmitButton = ({
         <button
             type="submit"
             disabled={loading}
-            className="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex gap-2 w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-            {loading ? buttonText : buttonStates[0]}
+            <div className="rabbit-running-sm flex w-40 h-30"></div>
+            <span>{loading ? buttonText : buttonStates[0]}</span>
         </button>
     );
 };
