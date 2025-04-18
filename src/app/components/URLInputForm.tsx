@@ -17,29 +17,40 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
     loading,
 }) => {
     // Initialize react-hook-form
-    const { register, handleSubmit, control, formState: { errors } } = useForm<FormValues>({
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm<FormValues>({
         defaultValues: {
             urls: [
-                { value: "https://niara.ai" },
-                { value: "https://blastmkt.com" },
+                { value: "https://niara.ai" }, 
+                { value: "https://google.com" }, 
                 { value: "" }
-            ]
+            ],
         },
-        mode: "onBlur"
+        mode: "onBlur",
     });
 
     // Setup field array for managing the URL inputs
     const { fields } = useFieldArray({
         control,
-        name: "urls"
+        name: "urls",
     });
 
     // Handle form submission
     const onSubmit = (data: FormValues) => {
         const filteredUrls = data.urls
-            .map(item => item.value)
-            .filter(url => url !== "");
-            
+            .map((item) => item.value)
+            .filter((url) => url !== "");
+        
+        // Additional validation for minimum 2 URLs
+        if (filteredUrls.length < 2) {
+            alert("Please enter at least 2 valid website URLs to start the race!");
+            return;
+        }
+
         onUrlsSubmit(filteredUrls);
     };
 
@@ -51,13 +62,20 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-5 bg-gray-800 bg-opacity-80 p-6 rounded-xl shadow-2xl text-white max-w-md"
         >
-            <h2 className="text-2xl font-bold mb-2 text-center">Enter URLs to Race</h2>
-            
+            <h2 className="text-2xl font-bold mb-2 text-center">
+                Enter URLs to Race
+            </h2>
+            <p className="text-sm text-center text-yellow-300 mb-2">
+                Please enter at least 2 valid website URLs
+            </p>
+
             {fields.map((field, index) => (
                 <div className="flex flex-col gap-1" key={field.id}>
-                    <label 
-                        htmlFor={`url-${index}`} 
-                        className={`font-bold ${labelColors[index] || "text-white"}`}
+                    <label
+                        htmlFor={`url-${index}`}
+                        className={`font-bold ${
+                            labelColors[index] || "text-white"
+                        }`}
                     >
                         URL {index + 1}:
                     </label>
@@ -69,22 +87,31 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
                                 id={`url-${index}`}
                                 placeholder="https://example.com"
                                 className={`w-full py-2 px-3 bg-gray-900 text-white focus:outline-none ${
-                                    errors.urls?.[index]?.value ? "border border-red-500" : ""
+                                    errors.urls?.[index]?.value
+                                        ? "border border-red-500"
+                                        : ""
                                 }`}
                                 {...register(`urls.${index}.value`, {
-                                    required: index === 0 ? "At least one URL is required" : false,
-                                    validate: value => {
-                                        // Allow empty values for optional URLs (except first one)
-                                        if (!value && index > 0) return true;
-                                        
+                                    required:
+                                        index <= 1
+                                            ? "This URL is required"
+                                            : false,
+                                    validate: (value) => {
+                                        // Allow empty values for optional URLs (after the first 2)
+                                        if (!value && index > 1) return true;
+
                                         // Simple URL validation
                                         try {
                                             const url = new URL(value);
-                                            return url.protocol === "http:" || url.protocol === "https:" || "Please enter a valid URL";
+                                            return (
+                                                url.protocol === "http:" ||
+                                                url.protocol === "https:" ||
+                                                "Please enter a valid URL"
+                                            );
                                         } catch {
                                             return "Please enter a valid URL";
                                         }
-                                    }
+                                    },
                                 })}
                             />
                         </div>
@@ -96,7 +123,7 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
                     </div>
                 </div>
             ))}
-            
+
             <div className="mt-2">
                 <button
                     type="submit"
@@ -106,9 +133,9 @@ const URLInputForm: React.FC<URLInputFormProps> = ({
                     {loading ? "Warming up the bunnies..." : "Start Race!"}
                 </button>
             </div>
-            
+
             <div className="text-center text-sm text-gray-400">
-                Enter up to 3 URLs to compare their PageSpeed scores
+                Enter 2-3 URLs to compare their PageSpeed scores
             </div>
         </form>
     );

@@ -4,6 +4,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import URLInputForm from "./components/URLInputForm";
 import { PageSpeedResult } from "./api/pagespeed/route";
+import { RaceResultResponse } from "./api/results/route";
+import Image from "next/image";
+import Footer from "./components/footer";
 
 type GamePhase = "start" | "input" | "countdown" | "race" | "results";
 
@@ -32,6 +35,15 @@ export default function HomePage() {
     // Handle URL form submit
     const onUrlsSubmit = async (inputUrls: string[]) => {
         setLoading(true);
+
+        // Ensure we have at least 2 URLs
+        if (inputUrls.length < 2) {
+            alert(
+                "Please enter at least 2 valid website URLs to start the race!"
+            );
+            setLoading(false);
+            return;
+        }
 
         // Limit to 3 URLs
         const limitedUrls = inputUrls.slice(0, 3);
@@ -107,10 +119,6 @@ export default function HomePage() {
                         // This rabbit has highest score, so it should finish first visually
                         const maxPossibleSpeed = 1.0; // Highest possible speed for any rabbit
                         speed = maxPossibleSpeed;
-
-                        console.log(
-                            `Highest score rabbit (${score.url}): speed=${speed}, score=${score.score}`
-                        );
                     } else {
                         // Normal speed calculation for other rabbits based on their score
                         // but ensure they're always slower than the highest-scoring rabbit
@@ -141,15 +149,7 @@ export default function HomePage() {
                     const winnerIdx = scores.findIndex(
                         (score) => score.score === maxScore
                     );
-
-                    // Log to verify the correct winner is being selected
-                    console.log(
-                        "Scores:",
-                        scores.map((s) => s.score)
-                    );
-                    console.log("Max score:", maxScore);
-                    console.log("Winner index:", winnerIdx);
-                    console.log("Winner website:", scores[winnerIdx].url);
+                    setWinnerIndex(winnerIdx);
 
                     // Activate finish line flash effect
                     document
@@ -184,7 +184,8 @@ export default function HomePage() {
                                 return;
                             }
 
-                            const result = await response.json();
+                            const result =
+                                (await response.json()) as RaceResultResponse;
                             if (result.shareId) {
                                 setShareId(result.shareId);
                             }
@@ -196,10 +197,7 @@ export default function HomePage() {
                     saveResult();
 
                     // Wait longer before showing results to make the disappearing effect noticeable
-                    setTimeout(() => {
-                        setWinnerIndex(winnerIdx);
-                        setPhase("results");
-                    }, 1500);
+                    setPhase("results");
                     clearInterval(raceInterval);
                 }
 
@@ -288,7 +286,7 @@ export default function HomePage() {
                     </h2>
 
                     <p className="mb-6 text-gray-300">
-                        Enter up to 3 website URLs and watch them race based on
+                        Enter 2-3 website URLs and watch them race based on
                         their PageSpeed scores. Faster websites = faster
                         bunnies!
                     </p>
@@ -324,107 +322,89 @@ export default function HomePage() {
             )}
 
             {phase === "results" && winnerIndex !== null && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-                    <div className="bg-gray-800 bg-opacity-90 rounded-lg p-6 text-white shadow-xl border-2 border-yellow-500 max-w-xl w-full max-h-[calc(100vh-100px)] overflow-auto">
-                        <h2 className="text-2xl font-bold mb-4 text-center text-yellow-300">
-                            🏆 Winner! 🏆
-                        </h2>
-
-                        <div className="flex items-center justify-center mb-6 bg-gray-900 bg-opacity-70 p-4 rounded-lg">
-                            <div className="mr-4">
-                                <div
-                                    className={`rabbit-running ${
-                                        winnerIndex === 0
-                                            ? "rabbit-yellow"
-                                            : winnerIndex === 1
-                                            ? "rabbit-blue"
-                                            : winnerIndex === 2
-                                            ? "rabbit-green"
-                                            : winnerIndex === 3
-                                            ? "rabbit-red"
-                                            : "rabbit-purple"
-                                    }`}
-                                ></div>
-                            </div>
-                            <div>
-                                <div className="font-bold text-lg">
-                                    {
-                                        scores[winnerIndex].url
-                                            .replace(/(^\w+:|^)\/\//, "")
-                                            .split("/")[0]
-                                    }
-                                </div>
-                                <div className="text-green-400 font-bold text-xl">
-                                    Score:{" "}
-                                    {scores[winnerIndex].score.toFixed(0)}
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3 className="text-xl font-bold mb-3">All Results</h3>
-                        <div className="mb-6 bg-gray-900 bg-opacity-50 rounded-lg p-2">
-                            {scores
-                                .sort((a, b) => b.score - a.score)
-                                .map((score, i) => (
-                                    <div
-                                        key={i}
-                                        className={`flex justify-between items-center p-2 ${
-                                            i === 0
-                                                ? "bg-yellow-900 bg-opacity-30"
-                                                : i % 2 === 0
-                                                ? "bg-gray-800 bg-opacity-50"
-                                                : ""
-                                        } rounded my-1`}
-                                    >
-                                        <div className="flex items-center">
-                                            <span className="mr-2 font-bold">
-                                                {i + 1}.
-                                            </span>
-                                            <span>
-                                                {
-                                                    score.url
-                                                        .replace(
-                                                            /(^\w+:|^)\/\//,
-                                                            ""
-                                                        )
-                                                        .split("/")[0]
-                                                }
+                <>
+                    <div className="flex justify-center mb-6">
+                        <Image
+                            src="/assets/logo.png"
+                            width={200}
+                            height={200}
+                            alt="Bunny Racer"
+                            className="block"
+                        />
+                    </div>
+                    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-800 bg-opacity-90 rounded-lg p-6 text-white shadow-xl border-2 border-yellow-500 max-w-xl w-full max-h-[calc(100vh-100px)] overflow-auto">
+                            <h2 className="text-2xl font-bold mb-4 text-center text-white">
+                                🏁 Race Result 🏁
+                            </h2>
+                            <div className="mb-6 bg-gray-900 bg-opacity-50 rounded-lg p-2">
+                                {scores
+                                    .sort((a, b) => b.score - a.score)
+                                    .map((score, i) => (
+                                        <div
+                                            key={i}
+                                            className={`flex justify-between items-center p-2 ${
+                                                i === 0
+                                                    ? "bg-yellow-900 bg-opacity-30"
+                                                    : i % 2 === 0
+                                                    ? "bg-gray-800 bg-opacity-50"
+                                                    : ""
+                                            } rounded my-1`}
+                                        >
+                                            <div className="flex items-center">
+                                                <span className="mr-2 font-bold text-3xl">
+                                                    {i === 0
+                                                        ? "🥇"
+                                                        : i === 1
+                                                        ? "🥈"
+                                                        : "🥉"}
+                                                </span>
+                                                <span>
+                                                    {
+                                                        score.url
+                                                            .replace(
+                                                                /(^\w+:|^)\/\//,
+                                                                ""
+                                                            )
+                                                            .split("/")[0]
+                                                    }
+                                                </span>
+                                            </div>
+                                            <span className="font-mono">
+                                                {score.score}
                                             </span>
                                         </div>
-                                        <span className="font-mono">
-                                            {score.score.toFixed(0)}
-                                        </span>
-                                    </div>
-                                ))}
-                        </div>
-
-                        <div className="flex flex-col gap-4 mt-6">
-                            <div className="text-center">
-                                <button
-                                    onClick={openShareModal}
-                                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 mr-3"
-                                >
-                                    Share Results
-                                </button>
-                                <button
-                                    onClick={startGame}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
-                                >
-                                    Race Again
-                                </button>
+                                    ))}
                             </div>
 
-                            <div className="mt-2 text-center">
-                                <a
-                                    href="/leaderboard"
-                                    className="inline-block bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded-lg transition duration-200"
-                                >
-                                    View Leaderboard 🏆
-                                </a>
+                            <div className="flex flex-col gap-4 mt-6">
+                                <div className="text-center">
+                                    <button
+                                        onClick={openShareModal}
+                                        className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200 mr-3"
+                                    >
+                                        Share Results
+                                    </button>
+                                    <button
+                                        onClick={startGame}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
+                                    >
+                                        Race Again
+                                    </button>
+                                </div>
+
+                                <div className="mt-2 text-center">
+                                    <a
+                                        href="/leaderboard"
+                                        className="inline-block bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-6 rounded-lg transition duration-200"
+                                    >
+                                        View Leaderboard 🏆
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </>
             )}
 
             {/* Race track - Visible only during race (hidden during results) */}
@@ -502,38 +482,6 @@ export default function HomePage() {
                             </button>
                         </div>
 
-                        <div className="bg-gray-800 p-4 rounded-lg mb-6 border border-gray-700">
-                            <div className="text-center mb-3">
-                                <div className="flex items-center justify-center">
-                                    <span className="text-3xl mr-2">🏆</span>
-                                    <div
-                                        className={`rabbit-running ${
-                                            winnerIndex === 0
-                                                ? "rabbit-yellow"
-                                                : winnerIndex === 1
-                                                ? "rabbit-blue"
-                                                : winnerIndex === 2
-                                                ? "rabbit-green"
-                                                : winnerIndex === 3
-                                                ? "rabbit-red"
-                                                : "rabbit-purple"
-                                        }`}
-                                    ></div>
-                                </div>
-                                <h4 className="text-lg font-bold text-yellow-300 mt-2">
-                                    {
-                                        scores[winnerIndex].url
-                                            .replace(/(^\w+:|^)\/\//, "")
-                                            .split("/")[0]
-                                    }
-                                </h4>
-                                <p className="text-green-400">
-                                    Score:{" "}
-                                    {scores[winnerIndex].score.toFixed(0)}
-                                </p>
-                            </div>
-                        </div>
-
                         <div className="mb-6">
                             <h4 className="text-sm font-semibold mb-2 text-gray-300">
                                 Share this URL:
@@ -606,31 +554,7 @@ export default function HomePage() {
                 </div>
             )}
 
-            {/* Footer */}
-            <div className="fixed bottom-0 left-0 right-0 text-center py-2 text-white bg-black bg-opacity-50 z-40 text-sm">
-                <div className="mb-1">
-                    <a
-                        href="/leaderboard"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-yellow-300 hover:text-yellow-200 font-bold"
-                    >
-                        View Leaderboard 🏆
-                    </a>
-                </div>
-                <div>
-                    Game created by the team of{" "}
-                    <a
-                        href="https://niara.ai"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-300 hover:text-blue-200 underline"
-                    >
-                        Niara.ai
-                    </a>
-                    . 🐰 Happy Easter!
-                </div>
-            </div>
+            <Footer />
         </main>
     );
 }
