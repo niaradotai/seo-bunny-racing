@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
             );
             return {
                 url,
-                score: url.includes("niara.ai") ? 98 : score,
+                score: score ?? 0,
             };
         })
     );
