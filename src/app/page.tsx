@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -274,8 +273,8 @@ export default function HomePage() {
             {phase === "start" && (
                 <div className="relative bg-gray-800 bg-opacity-80 p-8 rounded-xl shadow-2xl text-white text-center max-w-md">
                     <div className="flex justify-center mb-6">
-                        <img
-                            src="assets/logo.png"
+                        <Image
+                            src="/assets/logo.png"
                             width={200}
                             height={200}
                             alt="Bunny Racer"
